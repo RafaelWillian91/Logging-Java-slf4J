@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- appender é o destino-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- target serve para indicacao do tipo de pattern. Neste caso de System.err o erro é exibido em vermelho-->
+        <target>System.err</target>
+        <!-- transforma a saida de logging em um padrao-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- É o padrao seguido -->
+            <pattern>
+                %green([1] %d{HH:mm:ss.SSS}) [%t] %highlight(%-5level) %logger{36} - %boldWhite(%msg%n)
+            </pattern>
+        </encoder>
+
+    </appender>
+
+    <appender name="CONSOLE2" class="ch.qos.logback.core.ConsoleAppender">
+
+        <!-- transform the output into a pattern-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- It's the pattern followed-->
+            <pattern>
+                [2] %d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.ConsoleAppender">
+
+        <!-- turns the logging output int a pattern-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- It's the pattern followed -->
+                <target>System.err</target>
+            <pattern>
+                [2] %d{HH:mm:ss} [%t] %highlight(%-5level) %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+
+    </appender>
+
+
+    <!-- Cada logger usa um appender para um padrao especifico. o atributo name é o nome do pacote que ele referencia,
+    level é o nivel de mensagem e additivity mostra se ele vai herdar de outros loggers-->
+    <logger name="x" level="warn" >
+        <!-- appender é o nome de appender a que ele se referencia -->
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!--Existe aqui uma relacao hierarquica entre x e y. Ao deixar sem level, ele segue o level do logger pai.
+        A propriedade additivy é definida por padrão como true, ou seja, ela chama o outro logger tambem, duplicando as mensagens no caso-->
+    <logger name="x.y" additivity="false">
+        <!-- appender é o nome de appender a que ele se referencia -->
+        <appender-ref ref="CONSOLE2" />
+    </logger>
+
+
+    <!-- Por padrao o logger é o ROOT que é definido no nível debug, mas é possivel muda-lo -->
+    <logger name="ROOT" level="error">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!--hierarquia é feito com nomeDologger.nomeDologger.
+        O nível pode ser sobrescrito para outro maior no level dentro do logger.
+        Caso não exista um appender no logger, ele busca o de ROOT se Root foi definido e o logger esta com
+        additivity="true".
+        Uma boa prática é definir um appender no ROOT com um level, para ter uma referencia caso o looger não tenha algo mais especifico-->
+    <logger name="app4" level="traCe" additivity="true">
+        <!--  <appender-ref ref="CONSOLE" /> -->
+    </logger>
+
+    <logger name="app5" level="info" >
+
+    </logger>
+
+    <logger name="app5" level="info" >
+
+    </logger>
+
+    <!--additivity="false" para ele não considerar outros appenders na hierarquia-->
+    <logger name="app6" level="info" additivity="false">
+        <appender-ref ref="CONSOLE2" />
+    </logger>
+
+    <logger name="app7" level="warn" additivity="false">
+        <appender-ref ref="CONSOLE2" />
+    </logger>
+
+    <logger name="appenders.Appappender1" level="trace" additivity="true" >
+        <appender-ref ref="CONSOLE2" />
+    </logger>
+
+    <logger name="appenders.FileAppender1" level="trace" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+</configuration>

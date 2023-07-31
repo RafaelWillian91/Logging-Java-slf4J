@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <!-- for organization the log files, there is a tag <timestamp>. This tag has a key and datePattern
+         this key will be referenced in appender-->
+    <timestamp key="dateTimeFormat" datePattern="dd" />
+
+    <!-- appender is the path-->
+    <!-- there is the concept of append which means to define new lines in the file's log.
+         Can be disable using tag <append> false </append>-->
+    <appender name="file1" class="ch.qos.logback.core.FileAppender">
+        <!-- When we are dealing with file logging, we have to specify the path-->
+        <file>logs/file1.log</file>
+        <!-- operation the I/O are costly for system. We disable this operation if it very costly for System  -->
+        <immediateFlush>true</immediateFlush>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="file2" class="ch.qos.logback.core.FileAppender">
+        <file>logs/file2_${dateTimeFormat}.log</file>
+        <immediateFlush>true</immediateFlush>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="exercise" class="ch.qos.logback.core.FileAppender">
+        <file>logs/exerciseFile_${dateTimeFormat}.log</file>
+        <immediateFlush>true</immediateFlush>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <!-- -->
+    <appender name="RollingAppender1" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/fileRolling.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/rollingFile1.%d{mm}.zip</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizecap>1GB</totalSizecap>
+        </rollingPolicy>
+        <append>true</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <target>System.err</target>
+            <pattern>
+                %d{HH:mm:ss.SSS} [%t] %highlight(%-5level) %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="appenders.Appappender1" level="debug">
+        <appender-ref ref="console" />
+    </logger>
+
+
+    <logger name="appenders.FileAppender1" level="debug">
+        <appender-ref ref="file1" />
+    </logger>
+
+    <logger name="appenders.FileAppender2" level="debug">
+        <appender-ref ref="file2"/>
+    </logger>
+
+    <logger name="appenders.RollingFileAppender" level="debug">
+        <appender-ref ref="RollingAppender1"/>
+    </logger>
+
+    <logger name="exercises.ClassB" level="trace">
+        <appender-ref ref="exercise"/>
+    </logger>
+
+    <logger name="exercises.ClassA" level="trace">
+        <appender-ref ref="console"/>
+    </logger>
+
+</configuration>
